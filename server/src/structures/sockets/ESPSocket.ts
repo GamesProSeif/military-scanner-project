@@ -1,6 +1,7 @@
 import { RawData } from "ws";
 import BaseSocket from "./BaseSocket";
 import Server, { MyWebSocket } from "../Server";
+import { degreesToRadians } from "../../utils";
 
 export default class ESPSocket extends BaseSocket {
 	public interval: NodeJS.Timeout | null = null;
@@ -14,11 +15,11 @@ export default class ESPSocket extends BaseSocket {
 		return this.send("d:?");
 	}
 
-	public sendMoveForwardRequest(distance: number) {
+	public sendMoveForwardRequest(distance: number | string) {
 		return this.send(`f:${distance}`);
 	} 
 
-	public sendTurnRequest(angle: number) {
+	public sendTurnRequest(angle: number | string) {
 		return this.send(`t:${angle}`);
 	} 
 
@@ -35,17 +36,19 @@ export default class ESPSocket extends BaseSocket {
 	public onMessage(data: RawData): void {
 		const message = data.toString();
 
-		if (message.startsWith("d:"))
+		if (message === "ack")
+			this.server.car.unlock();
+		else if (message.startsWith("d:"))
 			this.parseData(message.slice(2));
 	}
 
 	private parseData(message: string) {
-		let readings = message.toString().split(" ");
-		let [x, y, angle, frontSensor, sideSensor] = readings.map(reading => parseFloat(reading));
+		const readings = message.toString().split(" ");
+		const [x, y, angle, frontSensor, sideSensor] = readings.map(reading => parseFloat(reading));
 
-		this.server.car.x = x;
-		this.server.car.y = y;
-		this.server.car.angle = angle;
+		// this.server.car.x = x;
+		// this.server.car.y = y;
+		// this.server.car.angle = degreesToRadians(angle);
 		this.server.aiAgent.frontSensor = frontSensor;
 		this.server.aiAgent.sideSensor = sideSensor;
 	}
