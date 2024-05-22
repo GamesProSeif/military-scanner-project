@@ -47,6 +47,10 @@ export default class Server {
 		});
 	}
 
+	public startAiAgent() {
+		setInterval(() => this.aiAgent.run(), 50);
+	}
+
 	private handleMessage(ws: MyWebSocket, message: RawData) {
 		console.log("DEBUG: MESSAGE ->", message.toString());
 

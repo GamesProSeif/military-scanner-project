@@ -1,7 +1,7 @@
 import { RawData } from "ws";
 import BaseSocket from "./BaseSocket";
 import Server, { MyWebSocket } from "../Server";
-import { degreesToRadians } from "../../utils";
+import { degreesToRadians, sleep } from "../../utils";
 
 export default class ESPSocket extends BaseSocket {
 	public interval: NodeJS.Timeout | null = null;
@@ -26,6 +26,8 @@ export default class ESPSocket extends BaseSocket {
 	public async start() {
 		await this.send(`s:${this.server.car.x} ${this.server.car.y} ${this.server.car.angle}`);
 		this.interval = setInterval(() => this.sendDataRequest(), 1000 / this.server.ESP_SEND_RATE);
+		await sleep(5000);
+		this.server.startAiAgent();
 	}
 
 	public onConnection() {
