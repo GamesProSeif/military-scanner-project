@@ -3,6 +3,9 @@ import BaseSocket from "./sockets/BaseSocket";
 import ESPSocket from "./sockets/ESPSocket";
 import MapSocket from "./sockets/MapSocket";
 import MLSocket from "./sockets/MLSocket";
+import Car from "./Car";
+import AiAgent from "./AiAgent";
+import Grid from "./Grid";
 
 export interface MyWebSocket extends WebSocket {
 	name: "ML" | "MAP" | "ESP";
@@ -12,13 +15,23 @@ export default class Server {
 	public readonly PORT = 8080;
 	public readonly CLIENTS_SIZE = 3;
 	public readonly ML_RECEIVE_RATE = 1;	// per second
-	public readonly ESP_RECEIVE_RATE = 1;	// per second
+	public readonly ESP_SEND_RATE = 1;	// per second
 	public readonly MAP_SEND_RATE = 1;		// per second
+	public readonly ML_THRESHOLD = 0.85;
 
 	private wss!: WebSocketServer;
 	public mlSocket!: MLSocket;
 	public mapSocket!: MapSocket;
 	public espSocket!: ESPSocket;
+	public car: Car;
+	public grid: Grid;
+	public aiAgent: AiAgent;
+
+	public constructor() {
+		this.car = new Car(this, 500, 500, 0);
+		this.grid = new Grid();
+		this.aiAgent = new AiAgent(this, this.car, this.grid);
+	}
 
 	public start() {
 		this.wss = new WebSocketServer({ port: this.PORT });

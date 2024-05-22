@@ -22,9 +22,22 @@ export default class GridItem {
 
 	/**
 	 * @returns string - encoded format of grid
-	 * @example "{g:1010}" means: discovered, soldier
 	 */
 	get encoded() {
-		return `{g:${(this.discovered ? 1 : 0) + this.obstacle << 1}}`;
+		return [this.discovered ? 1 : 0, this.obstacle];
+	}
+
+	public setObstacle(className: string) {
+		switch (className) {
+			case "soldier":
+				this.obstacle = 2;
+				break;
+			case "tank":
+				this.obstacle = 2;
+				break;
+			case "camp":
+				this.obstacle = 3;
+				break;
+		}
 	}
 }

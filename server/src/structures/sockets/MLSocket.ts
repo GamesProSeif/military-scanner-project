@@ -14,10 +14,18 @@ export default class MLSocket extends BaseSocket {
 	}
 
 	public async onMessage(message: RawData) {
-		const detectedObjects = [];
-		for (const line of message.toString().split("\n")) {
-			const [objectName, score, xmin, ymin, xmax, ymax] = line.split(" ");
-			detectedObjects.push({ objectName, score, xmin, ymin, xmax, ymax });
-		}
+		this.parseData(message.toString());
+	}
+
+	private parseData(message: string) {
+		const match = message.match(/Predicted class: (\w+), Confidence: ([\d.]+)%/);
+		if (!match)
+			throw new TypeError(`Couldn't parse ML Data\tMessage: ${message}`);
+
+		const className = match[1];
+		const confidence = parseFloat(match[2]) / 100;
+
+		if (confidence >= this.server.ML_THRESHOLD)
+			this.server.aiAgent.storeEntity(className);
 	}
 }

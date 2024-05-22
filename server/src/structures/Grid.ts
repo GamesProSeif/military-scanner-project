@@ -12,7 +12,7 @@ export default class Grid extends Array<Array<GridItem>> {
 
 		for (let i = 0; i < dimensions; i++) {
 			tempArr[i] = [];
-			for (let j = 0; i < dimensions; i++)
+			for (let j = 0; j < dimensions; j++)
 				tempArr[i][j] = new GridItem(i, j);
 		}
 
