@@ -100,8 +100,8 @@ export default class Grid extends Array<Array<GridItem>> {
 		x = Math.round(x);
 		y = Math.round(y);
 
-		let i = x - x % this.size;
-		let j = y - y % this.size;
+		let i = Math.floor(x / this.size);
+		let j = Math.floor(y / this.size);
 
 		return [i, j];
 	}
