@@ -18,7 +18,7 @@ async def handle_message(websocket, message):
 async def send_data(websocket, rate):
 	while True:
 		try:
-			with open("data.txt", "r") as file:
+			with open("../ml-classifier/predictions.txt", "r") as file:
 				data = file.read()
 			await websocket.send(data)
 			await asyncio.sleep(1 / rate)
