@@ -28,7 +28,8 @@ The RC car is designed to be compact and versatile, equipped with various sensor
    - **Function**: Corrects errors from turning motors to ensure accurate navigation.
 
 ## Process Diagram
-[Include a diagram showing the process flow of the RC car from data collection to transmission and map generation]
+![Process Diagram](https://github.com/GamesProSeif/military-scanner-project/assets/45742587/d1baddf4-a622-44f4-b96d-564e87882547)
+
 
 ## Project Timeline and Milestones
 - **Week 10**: Acquiring the RC car.
